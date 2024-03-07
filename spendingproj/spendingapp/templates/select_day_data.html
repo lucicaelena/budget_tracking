@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>spending app</title>
 </head>
 <body>
-$END$
+<input type="date">
+<button type="button" class="btn btn-primary" onclick="getday()">Select a day</button>
+<script>
+    function getday(){
+        day = document.querySelector("input")
+        if(day.value) {
+            url = "http://127.0.0.1:8000/?day=" + day.value
+            window.location.href = url
+        } else {
+            alert("Select a day")
+        }
+    }
+</script>
 </body>
 </html>
