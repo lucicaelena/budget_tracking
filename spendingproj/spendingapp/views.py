@@ -1,11 +1,16 @@
 from django.http import  HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from .models import Expense
-from .forms import ExpenseForm
+from .models import Expense, Category, Vendor,Income
+from .forms import ExpenseForm,IncomeForm
 from datetime import datetime, timedelta
 import csv
 
 # Create your views here.
+
+def home(request):
+    return render(request, 'index.html')
+
+
 def spending(request):
     category = ""
     # Today button
@@ -43,10 +48,11 @@ def spending(request):
         # check if category parameter
         category = request.GET.get("category")
         if category:
-            spendings = Expense.objects.filter(category=category).all()
+            spendings = Expense.objects.filter(category__pk=category)
 
-    spendings_category = Expense.objects.all()
-    categories = {spending.category for spending in spendings_category}
+
+    categories = Category.objects.all()
+    vendors = Vendor.objects.all()
 
     now = datetime.now()
     today = {
@@ -69,15 +75,18 @@ def spending(request):
     }
     total_amount = sum(spending.amount for spending in spendings)
     return render(request, "spending.html",
-                  {"spendings": spendings, "total_amount": total_amount, "today": today, "month": month,"week": week,"categories":categories,"selected_category":category})
+                  {"spendings": spendings, "total_amount": total_amount, "today": today, "month": month, "week": week, "categories":categories,"selected_category":category})
 
 
 def adauga(request):
     if request.method == 'GET':
+        categories = Category.objects.all()
+        vendors = Vendor.objects.all()
         form = ExpenseForm()
-        return render(request, "adauga.html", {"form": form})
+        return render(request, "adauga.html", {"form": form, "categories": categories, "vendors": vendors})
     elif request.method == 'POST':
         form = ExpenseForm(request.POST,request.FILES)
+        print()
         if form.is_valid():
             form.save()
         return HttpResponseRedirect("/")
@@ -109,24 +118,48 @@ def select_day_data(request):
 def select_range_data(request):
     return render(request,"select_range_data.html")
 
-def edit(request, id):
+
+def edit(request,id):
     spending = Expense.objects.filter(id=id).first()
     data_edit = spending.data.strftime("%Y-%m-%d")
+    print(data_edit)
     if request.method == 'GET':
-       return render(request,"edit.html",{"spending":spending,"data":data_edit})
+        categories = Category.objects.all()
+        vendors = Vendor.objects.all()
+        return render(request, "edit.html",{"spending":spending,"data":data_edit,"categories":categories,"vendors":vendors})
+
     elif request.method == 'POST':
-        form = ExpenseForm(request.POST, request.FILES,instance=spending)
-        file = request.FILES.get("image")
-        if not file:
-            request.FILES.update({"image":spending.image})
-            form = ExpenseForm(request.POST, request.FILES,instance=spending)
+        form = ExpenseForm(request.POST, instance=spending)
         print(form.is_valid())
 
         if form.is_valid():
-           form.save()
+            form.save()
         return HttpResponseRedirect("/")
 
 def delete(request,id):
     Expense.objects.filter(id=id).delete()
     return HttpResponseRedirect("/")
+
+def incomes(request):
+    incomes = Income.objects.all()
+    total_income = sum(income.amount for income in incomes)
+    return render(request,'incomes.html',{'incomes': incomes,'total_income':total_income})
+
+
+def add_income(request):
+    if request.method == 'GET':
+        form = IncomeForm()
+        return render(request, "add_income.html", {"form": form})
+    elif request.method == 'POST':
+        form = IncomeForm(request.POST)
+        print()
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect("/incomes/")
+
+
+
+
+
+
 
