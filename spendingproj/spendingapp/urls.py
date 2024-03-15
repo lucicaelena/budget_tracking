@@ -11,5 +11,6 @@ urlpatterns = [
     path('export/', views.export, name='export'),
     path('edit/<int:id>/', views.edit, name='edit'),
     path('delete/<int:id>/', views.delete, name='delete'),
-    path('incomes/',views.incomes,name='incomes')
+    path('incomes/',views.incomes,name='incomes'),
+    path('add_income/',views.add_income,name='add_income')
 ]
