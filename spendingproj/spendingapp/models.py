@@ -30,7 +30,6 @@ class Expense(models.Model):
 def __str__(self):
     return f"[{self.data}]:{self.amount}"
 
-
 class Income(models.Model):
     amount = models.IntegerField()
     data = models.DateField()
