@@ -1,5 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from .models import Expense, Category, Vendor,Income
 from .forms import ExpenseForm,IncomeForm
 from datetime import datetime, timedelta
@@ -89,7 +91,7 @@ def adauga(request):
         print()
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/spending")
 
 
 # TODO: write a view function that will export the data
@@ -134,11 +136,11 @@ def edit(request,id):
 
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect("/")
+            return redirect("spending")
 
 def delete(request,id):
     Expense.objects.filter(id=id).delete()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse("spending"))
 
 def incomes(request):
     incomes = Income.objects.all()
@@ -155,5 +157,4 @@ def add_income(request):
     else:
         form = IncomeForm()
     return render(request, 'add_income.html', {'form': form})
-
 

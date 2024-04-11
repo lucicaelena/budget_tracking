@@ -7,6 +7,7 @@ class ExpenseForm(ModelForm):
         model = Expense
         fields = ['amount','data','description','category','vendor']
 
+
 class IncomeForm(ModelForm):
     class Meta:
         model = Income
