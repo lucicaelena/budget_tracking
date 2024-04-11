@@ -22,10 +22,10 @@
     <button type="button" class="btn btn-primary" onclick="getAllData()">All Data</button>
 
     <!-- TODO: Write an HTML element for getSelectDayData, maybe create a new HTML page, because clicking on this button would imply opening a input type date element -->
-    <button type="button" class="btn btn-primary" onclick="location.href='/select_day_data'">Select Day Data</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='/select_day_data/'">Select Day Data</button>
 
     <!-- TODO: Write an HTML element for getSelectRangeData, maybe create a new HTML page, because clicking on this button would imply opening two input type date elements (one for start date, another for end date) -->
-    <button type="button" class="btn btn-primary" onclick="location.href='/select_range_data'">Select Range Data</button>
+    <button type="button" class="btn btn-primary" onclick="location.href='/select_range_data/'">Select Range Data</button>
 
     <!-- TODO: Write an HTML element for exportData. This button should trigger a download -->
     <a href="/export/" class="btn btn-primary">Export Data</a>
@@ -60,9 +60,9 @@
             {% endif %}
             {% for category in categories %}
                 {% if selected_category == category %}
-                    <option value="{{category}}" selected>{{category}}</option>
+                    <option value="{{category.id}}" selected>{{category}}</option>
                 {% else %}
-                    <option value="{{category}}">{{category}}</option>
+                    <option value="{{category.id}}">{{category}}</option>
             {% endif %}
             {% endfor %}
         </select>
@@ -74,11 +74,11 @@
     <script src="{% static 'scripts.js' %}"></script>
     <script>
         function getTodayData(value) {
-            var url = 'http://127.0.0.1:8000/?today=' + value
+            var url = 'http://127.0.0.1:8000/spending/?today=' + value
             window.location.href = url;
         }
         function getMonthData(value) {
-            var url = 'http://127.0.0.1:8000/?month=' + value
+            var url = 'http://127.0.0.1:8000/spending/?month=' + value
             window.location.href = url;
         }
         // TODO: write the functions for the remaining buttons:
@@ -86,9 +86,11 @@
 
         // - getAllTimeData
         function getAllData() {
-            window.location.href = 'http://127.0.0.1:8000/'
+            window.location.href = 'http://127.0.0.1:8000/spending'
         }
         // - getSelectDayData
+
+
         // - getSelectRangeData
         // TODO: BONUS!!! move all the functions from above in the `script.js` folder
     </script>

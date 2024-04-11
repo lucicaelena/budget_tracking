@@ -1,5 +1,5 @@
-from django.http import  HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect
 from .models import Expense, Category, Vendor,Income
 from .forms import ExpenseForm,IncomeForm
 from datetime import datetime, timedelta
@@ -74,7 +74,7 @@ def spending(request):
         'display': first_day_of_week.strftime('%d %b') + '-' + last_day_of_week.strftime('%d %b')
     }
     total_amount = sum(spending.amount for spending in spendings)
-    return render(request, "spending.html",
+    return render(request, "spending.html/",
                   {"spendings": spendings, "total_amount": total_amount, "today": today, "month": month, "week": week, "categories":categories,"selected_category":category})
 
 
@@ -147,19 +147,13 @@ def incomes(request):
 
 
 def add_income(request):
-    if request.method == 'GET':
-        form = IncomeForm()
-        return render(request, "add_income.html", {"form": form})
-    elif request.method == 'POST':
+    if request.method == 'POST':
         form = IncomeForm(request.POST)
-        print()
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect("/incomes/")
-
-
-
-
-
+            return redirect('incomes')
+    else:
+        form = IncomeForm()
+    return render(request, 'add_income.html', {'form': form})
 
 
