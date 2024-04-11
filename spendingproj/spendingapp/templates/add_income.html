@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <form method="POST" action="/incomes/" enctype="multipart/form-data">
+        <form method="POST" action="/add_income/" enctype="multipart/form-data">
             {%csrf_token%}
             <div class="mb-3">
                 <label class="form-label">Amount</label>
@@ -18,7 +18,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Data</label>
-                <input class="form-control" type="date" name="date">
+                <input class="form-control" type="date" name="data">
             </div>
 
             <div class="mb-3">
